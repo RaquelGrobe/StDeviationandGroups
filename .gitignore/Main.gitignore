@@ -23,6 +23,7 @@ public class Main {
     public static void main(String[] args) {
 
         boolean rangeSet          = false;
+        boolean groupsSet         = false;
         boolean methodSelected    = false;
         boolean userExitRequest   = false;
         boolean dataError         = false;
@@ -62,9 +63,8 @@ public class Main {
                         break;
                     }
 
-                    case 2:{ // Discrete Values in Frequency Table
-                        CalcSD.setCalcMethod(FRQTABLE);
-                        methodSelected = true;
+                    case 2: // Discrete Values in Frequency Table
+                    case 3:{ // Grouped Values
 
                         while (!rangeSet){
                             System.out.println("\t Please enter the Minimum Value for the Range");
@@ -89,12 +89,35 @@ public class Main {
                                 rangeSet = false;
                             }
                         }
-                        break;
-                    }
 
-                    case 3:{ // Grouped Values
-                        CalcSD.setCalcMethod(GROUPED);
+                        if (methodSelection == 2){
+                            CalcSD.setCalcMethod(FRQTABLE);
+                        }
+                        else {
+                            CalcSD.setCalcMethod(GROUPED);
+                        }
+
                         methodSelected = true;
+
+                        while (!groupsSet){
+                            System.out.println("\t Please enter the number of groups you would like to use");
+                            if (scanSystemIn.hasNextInt()){
+
+                            }
+                        }
+
+                        //use while loop to group set similar structure to that of above
+                        //modulo, if the remainder is zero than you can do the calculations, if the remainder is not zero than you have to prompt the user for a different
+                        //value
+
+
+
+
+
+
+
+
+
                         break;
                     }
 
