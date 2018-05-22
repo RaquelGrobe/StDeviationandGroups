@@ -130,7 +130,8 @@ public class StDeviation {
                 break;
             }
 
-            case FRQTABLE: {
+            case FRQTABLE:
+            case GROUPED:{
 
                 if ((getMin() != INVALID_RANGE) && (getMax() != INVALID_RANGE)){
 
@@ -158,11 +159,6 @@ public class StDeviation {
                 }
                 break;
             }
-
-            case GROUPED:{
-            //if it's in range then its added to the array
-            //
-            }
             default:{
                 sdItems    = INVALID;
                 sdcalcMethod = INVALID_CALC_METHOD;
@@ -177,6 +173,13 @@ public class StDeviation {
     // The following method (function) will return the total number of data
     // items currently stored
 
+    //      Pre-Conditions:
+    //          - none
+    //      Return Value:
+    //          - the number of data items
+    //      Post-Condition
+    //          - none
+    //
     public int getNumberOfDataItems(){
         return sdItems;
     }
