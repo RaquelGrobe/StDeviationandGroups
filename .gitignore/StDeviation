@@ -71,24 +71,12 @@ public class StDeviation {
         return sdMaxRange;
     }
 
-    // --------------------------------------------------
-    // The following method (procedure) will set the current value for
-    // the number of groups the user wishes to use with the Frequency
-    // Method of Calculation.
-    //
-    //      Pre-Conditions:
-    //          - none
-    //      Return Value:
-    //          - none,
-    //      Post-Conditions:
-    //          - stores an Integer value between 1, and userMax - userMin
-    //
+
     public void setNumberOfGroups(int groups){
 
-        if ((groups > MINDATA) && (groups <= (sdMaxRange  - sdMinRange))){
+        if ((groups > MINDATA) && (groups <= (sdMaxRange  - sdMinRange)) && (((sdMaxRange  - sdMinRange)+1) % groups == 0)) {
             sdNumOfGroups = groups;
-        }
-        else {
+        } else {
             sdNumOfGroups = INVALID;
         }
     }
@@ -97,24 +85,6 @@ public class StDeviation {
         return sdNumOfGroups;
     }
 
-    // ******************************************************************************
-    // ******************************************************************************
-
-    // --------------------------------------------------
-    // The following method (procedure) will take a new data item (a parameter)
-    // and add it into the 1 Dimensional Array of data values to be used later.
-    //
-    //      Pre-Conditions:
-    //          - Calculation Method, and Range values must have been set
-    //      Return Value:
-    //          - none
-    //      Post-Condition
-    //          - Data Item is added into Data Storage
-    //          - sdItems incremented
-    //          - ERROR
-    //              - sdItems set to INVALID, and
-    //              - calcMethod is set to INVALID_CALC_METHOD
-    //
     public void addNewDataItem(int dataItem){
 
         if ((sdItems == INVALID)){
@@ -169,17 +139,6 @@ public class StDeviation {
 
     }
 
-    // --------------------------------------------------
-    // The following method (function) will return the total number of data
-    // items currently stored
-
-    //      Pre-Conditions:
-    //          - none
-    //      Return Value:
-    //          - the number of data items
-    //      Post-Condition
-    //          - none
-    //
     public int getNumberOfDataItems(){
         return sdItems;
     }
@@ -262,10 +221,27 @@ public class StDeviation {
             }
 
             case GROUPED:{
-                sdAve = INVALID;
-                sdcalcMethod = INVALID_CALC_METHOD;
-                System.out.println("ERROR: Standard Deviation Calculation Method \"GROUPED\" UNIMPLEMENTED");
+                double numofval = (getMax() - getMin()) + 1;
+                double numingroup = (numofval) / getNumberOfGroups();
+                double groupedtotal = 0;
+
+                if (sdItems != INVALID) {
+                    for (int i = getMin(); i < (getMax() +1); i += numingroup) {
+
+                        for (int j = i; j < (numingroup + i); j++) {
+                            groupedtotal += Data[j];
+                        }
+                        total = total + (groupedtotal * ((i + (i + (numingroup - 1))) /2));
+
+                    }
+                    sdAve = total /  sdItems;
+                } else {
+                    // Pre-Conditions have not been met
+                    sdAve = INVALID;
+                }
+
                 break;
+
             }
 
             default:{
@@ -276,20 +252,9 @@ public class StDeviation {
             }
         }
 
-        // returns the calculated average
         return sdAve;
     }
 
-    // --------------------------------------------------
-    // The following method (function) returns a double precision value which is the Variance of all
-    // of the data values. If there is no data, or if the average has not been calculated
-    // then it returns INVALID
-    //
-    //      Pre-Conditions:
-    //          - Calculation Method, and Range values must have been set
-    //          - at least one data has been added
-    //          - the average must have been calculated
-    //
     public double calcVariance(){
 
         double total = 0;
@@ -332,10 +297,10 @@ public class StDeviation {
                     //
                     for (int i = getMin(); i < getMax(); i++){
 
-                        frequency = Data[i];                         // set the frequency for this value "i"
-                        difference = (i - sdAve);                    // calculates difference between "i" and mean
-                        diffSquared = Math.pow(difference,2);        // squares the difference
-                        total = total + (diffSquared * frequency);   // adds difference squared * frequency into total
+                        frequency = Data[i];
+                        difference = (i - sdAve);
+                        diffSquared = Math.pow(difference,2);
+                        total = total + (diffSquared * frequency);
                     }
 
                     sdVar = total / (double) sdItems;                 // divides total by the number of observations
@@ -349,9 +314,31 @@ public class StDeviation {
             }
 
             case GROUPED:{
-                sdAve = INVALID;
-                sdcalcMethod = INVALID_CALC_METHOD;
-                System.out.println("ERROR: Standard Deviation Calculation Method \"GROUPED\" UNIMPLEMENTED");
+                double numofval = (getMax() - getMin()) + 1;
+                double numingroup = (numofval) / getNumberOfGroups();
+                double n = 0;
+                double groupedtotal = 0;
+
+                if (sdItems != INVALID) {
+                    for (int i = getMin(); i < (getMax() +1); i += numingroup) {
+
+                        for (int j = i; j < (numingroup + i); j++) {
+                            groupedtotal += Data[j];
+                            n += Data[j];
+                        }
+                        difference = (((i + (i + (numingroup - 1))) /2) - sdAve);
+                        diffSquared = Math.pow(difference,2);
+                        total = total + (diffSquared * frequency);
+                        groupedtotal = 0;
+                    }
+                    sdVar = total / n;
+                } else {
+                    // Pre-Conditions have not been met
+                    sdVar = INVALID;
+                }
+
+                break;
+
             }
 
             default:{
