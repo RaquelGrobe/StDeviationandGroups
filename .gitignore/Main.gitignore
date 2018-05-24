@@ -99,24 +99,29 @@ public class Main {
 
                         methodSelected = true;
 
-                        while (!groupsSet){
-                            System.out.println("\t Please enter the number of groups you would like to use");
-                            if (scanSystemIn.hasNextInt()){
+                        if (CalcSD.getCalcMethod()== GROUPED) {
+                            int userGroups = INVALID;
+                            boolean GroupsFinalized = false;
 
+                            while (!GroupsFinalized){
+                                Scanner scanGroups = new Scanner(System.in);
+                                System.out.println("Please type in the number of groups");
+
+                                if (scanGroups.hasNextInt()){
+                                    userGroups = scanGroups.nextInt();
+                                    CalcSD.setNumberOfGroups(userGroups);
+                                } else {
+                                    System.out.println("ERROR: Please input only integer values");
+                                }
+
+                                if (CalcSD.getNumberOfGroups() != INVALID) {
+                                    GroupsFinalized = true;
+                                }else {
+                                    GroupsFinalized = false;
+                                    System.out.println("ERROR: INVALID GROUPS");
+                                }
                             }
                         }
-
-                        //use while loop to group set similar structure to that of above
-                        //modulo, if the remainder is zero than you can do the calculations, if the remainder is not zero than you have to prompt the user for a different
-                        //value
-
-
-
-
-
-
-
-
 
                         break;
                     }
