@@ -143,25 +143,7 @@ public class StDeviation {
         return sdItems;
     }
 
-    // --------------------------------------------------
-    // The following method (procedure) calculates the average based on
-    // the calculation method selected
-    //
-    //      Pre-Conditions:
-    //          - Calculation Method, and Range values must have been set
-    //          - at least one data has been added
-    //      Return Value:
-    //          - none
-    //      Post-Condition
-    //          - NO ERROR sdAve is set to the average
-    //          - ERROR
-    //              Data Items:
-    //                 - sdAve = INVALID
-    //              Data Range:
-    //                 - sdAve = INVALID, and sdMaxRange & sdMaxRange = INVALID_RANGE
-    //              Calculation Method:
-    //                 - sdAve = INVALID, and calcMethod = INVALID_CALC_METHOD
-    //
+
     public double calcAverage(){
 
         double total = 0;
@@ -171,18 +153,13 @@ public class StDeviation {
 
                 if (sdItems != INVALID){
 
-                    // Add all data values together (recall sdItems is the number of data items in the
-                    // Data storage array
                     for (int i = 0; i < sdItems; i++){
                         total = total +  Data[i];
                     }
 
-                    // calculate the average, the "(double)" below instructs the computer to treat
-                    // the integer value of "sdItems" as a real number
                     sdAve = total / (double) getNumberOfDataItems();
                 }
                 else {
-                    // Pre-Conditions have not been met
                     sdAve = INVALID;
                 }
 
@@ -191,18 +168,12 @@ public class StDeviation {
             case FRQTABLE: {
 
                 if (sdItems != INVALID){
-
-                    // The Maximum must be greater that the Minimum value provided
                     if (getMax() > getMin()){
 
-                        // Loop over all values in range and add to the total
-                        // the value, "i", multiplied by the frequence "Data[i]"
                         for (int i = getMin(); i <= getMax(); i++){
                             total = total + (i * Data[i]);
                         }
 
-                        // calculate the average, the "(double)" below instructs the computer to treat
-                        // the integer value of "sdItems" as a real number
                         sdAve = total / (double) getNumberOfDataItems();
 
                     }
@@ -213,7 +184,7 @@ public class StDeviation {
                     }
                 }
                 else {
-                    // Pre-Conditions have not been met
+
                     sdAve = INVALID;
                 }
 
@@ -303,7 +274,7 @@ public class StDeviation {
                         total = total + (diffSquared * frequency);
                     }
 
-                    sdVar = total / (double) sdItems;                 // divides total by the number of observations
+                    sdVar = total / (double) sdItems;
 
                 }
                 else {
@@ -316,20 +287,21 @@ public class StDeviation {
             case GROUPED:{
                 double numofval = (getMax() - getMin()) + 1;
                 double numingroup = (numofval) / getNumberOfGroups();
+
                 double n = 0;
-                double groupedtotal = 0;
+               // double groupedtotal = 0;
 
                 if (sdItems != INVALID) {
                     for (int i = getMin(); i < (getMax() +1); i += numingroup) {
 
                         for (int j = i; j < (numingroup + i); j++) {
-                            groupedtotal += Data[j];
+                         //   groupedtotal += Data[j];
                             n += Data[j];
                         }
                         difference = (((i + (i + (numingroup - 1))) /2) - sdAve);
                         diffSquared = Math.pow(difference,2);
                         total = total + (diffSquared * frequency);
-                        groupedtotal = 0;
+                       // groupedtotal = 0;
                     }
                     sdVar = total / n;
                 } else {
@@ -352,25 +324,13 @@ public class StDeviation {
         return sdVar;
     }
 
-    // --------------------------------------------------
-    // The following method (function) returns a double precision value which is the Standard
-    // Deviation of all of the data values. If there is no data, no average, or if
-    // the variance has not been calculated then it returns INVALID
-    //
-    //      Pre-Conditions:
-    //          - at least one data has been added
-    //          - the average must have been calculated
-    //          - the variance must have been calculated
-    //
     public double calcStandardDeviation(){
 
-        // Checks that data entry, average, and variance have been done
         if ((sdItems != INVALID) || (sdAve != INVALID) || (sdVar != INVALID)) {
             sdDev = Math.sqrt(sdVar);
         }
         else {
-            // Pre-Conditions have not been met
-            sdDev = INVALID;
+                    sdDev = INVALID;
         }
 
         return sdDev;
