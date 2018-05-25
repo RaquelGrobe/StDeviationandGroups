@@ -183,8 +183,13 @@ public class Main {
                         }
 
                         case GROUPED: {
-                            System.out.println("WARNING: Grouped Calculation Method not implemented");
-                            dataError = true;
+                            if (howManyFileItems <= MAXDATA){
+                                CalcSD.addNewDataItem(scanUserFile.nextInt());
+                            }
+                            else {
+                                System.out.println("WARNING: Grouped Calculation Method not implemented");
+                                dataError = true;
+                            }
                             break;
                         }
 
